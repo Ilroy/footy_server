@@ -2,21 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
+require('dotenv').config();
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
-const knex = require('knex')
-const footy_db = knex(
-    {
-        client: 'pg',
-        connection: {
-            host: '127.0.0.1',
-            user: 'postgres',
-            password: 'united10',
-            database: 'footy_db'
-        }
-    }
-);
+const footy_db = require('./database/knex');
 
 app.get('/', (req,res) =>{
     console.log("working....");
@@ -103,7 +93,7 @@ app.post('/signin', (req,res) =>{
 
 
 // TODO: GET REQUEST FOR CALLING RFOOTBALL API TO GET LIST OF COUNTRIES
-app.listen(3000, () =>{
+app.listen(process.env.PORT || 3000, () =>{
     console.log("listeningg.....");
 });
 
