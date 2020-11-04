@@ -1,12 +1,11 @@
 import userService from "../services/userService";
 
 const userController = {
-    signIn(req,res) {
-        
-
-        
-
+    async signIn(req,res) {
+        const user = await userService.signInUser(req.body);
+        return (user === null)? res.status(400).json("error signing in") : res.json(user); 
     },
+    
     async register(req,res) {
         const isRegistered = await userService.registerUser(req.body);
 
