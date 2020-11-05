@@ -1,14 +1,14 @@
-const bcrypt = require('bcrypt');
-import dbOperations from '../database/dbOperations';
+import bcrypt from 'bcrypt';
+import dbOperations from '../database/dbOperations.js';
 
 const userService = {
     async signInUser({email,password}){
         try{
+            console.log(`in service email: ${email}, password: ${password}`)
             const hash = await dbOperations.getHash(email);
-
+            
             if(await bcrypt.compare(password, hash)){
                 const user = await dbOperations.getUser(email);
-
                 const leagues = await dbOperations.getLeagues(user.id);
                 const teams = await dbOperations.getTeams(user.id);
 
@@ -26,7 +26,9 @@ const userService = {
         try{
             const saltRounds = 10;
             const hash = await bcrypt.hash(password, saltRounds);
-            return await dbOperations.createUser({hash:hash, email:email}, rest);
+            const isRegistered=await dbOperations.createUser({hash:hash, email:email}, rest);
+            console.log(isRegistered);
+            return isRegistered;
         }catch(err){
             console.log("error registering");
             return null;

@@ -1,39 +1,56 @@
-import database from './knex';
+import database from './knex.js';
 
 
 const dbOperations = {
   async createUser(loginInfo, userInfo) {
     try {
-      return await database.transaction(async (trx) => {
+      const value = await database.transaction(async (trx) => {
         try {
-          const email = await trx
+          const emailResponse = await trx
             .insert(loginInfo)
             .into("login")
-            .returning("email")[0];
+            .returning("email");
+            
+          const email = emailResponse[0];
+          console.log(email);
 
-          const userId = await trx("users")
+          const userIdReponse = await trx("users")
             .insert({ ...userInfo, email: email })
-            .returning("id")[0];
+            .returning("id");
+
+          console.log(userIdReponse);
           
-          console.log("Transaction Success");  
-          return user !== null;
+         
+          await trx.commit();  
+          console.log("Transaction Success");
+          const isRegisteredSuccessfully = (Array.isArray(userIdReponse) && userIdReponse.length)? true:false;
+          console.log(`is registed success: ${isRegisteredSuccessfully}`);
+          return isRegisteredSuccessfully;
         } catch (err) {
+          await trx.rollback();
           console.log("Transaction Failed");
-          return false;
+
+          throw err;
         }
       });
+      console.log(`value is ${value}`)
+      return value;
     }catch (err){
         console.log("Database access error");
         return false;
     }
+
   },
 
-  async getUser({email}){
+  async getUser(email){
     try{
-      return await database
+      const dbReponse = await database
       .select('*')
       .from('users')
-      .where('email', '=', email)[0];
+      .where('email', '=', email);
+
+      return dbReponse[0];
+
     }catch(err){
       console.log("error getting user");
       return null;
@@ -42,21 +59,21 @@ const dbOperations = {
 
 
   },
-  async getHash({email}){
+  async getHash(email){
     try{
-    const hash = await database
+    const dbResponse = await database
     .select('hash')
     .from('login')
-    .where('email', '=', email)[0];
+    .where('email', '=', email);
 
-    return hash;
+    return dbResponse[0].hash;
     } catch (err){
       console.log("error accessing database")
       return null;
     };
   },
 
-  async getLeagues({userId}){
+  async getLeagues(userId){
     try{
       const dbLeagues = await database
       .select('league')
@@ -70,7 +87,7 @@ const dbOperations = {
     }
   },
 
-  async getTeams({userId}){
+  async getTeams(userId){
     try{
       const dbTeams = await database
       .select('team')

@@ -1,6 +1,8 @@
-require('dotenv').config();
 
-module.exports = {
+import dotenv from 'dotenv';
+dotenv.config();
+
+const knexFile =  {
   development: {
     client: "pg",
     connection: {
@@ -18,3 +20,5 @@ module.exports = {
     }
   },
 };
+
+export default knexFile;

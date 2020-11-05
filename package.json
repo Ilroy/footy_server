@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "footy_server",
   "version": "1.0.0",
   "description": "",
