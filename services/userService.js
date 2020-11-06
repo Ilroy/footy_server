@@ -16,7 +16,7 @@ const userService = {
             }
         }catch (err){
             console.log("error signing in");
-            return null;
+            throw err;
         }
 
 
@@ -26,12 +26,11 @@ const userService = {
         try{
             const saltRounds = 10;
             const hash = await bcrypt.hash(password, saltRounds);
-            const isRegistered=await dbOperations.createUser({hash:hash, email:email}, rest);
-            console.log(isRegistered);
-            return isRegistered;
+            await dbOperations.createUser({hash:hash, email:email}, rest);
+            return;
         }catch(err){
             console.log("error registering");
-            return null;
+            throw err;
         }
     }
 }

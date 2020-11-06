@@ -1,43 +1,26 @@
+import knexFile from '../knexfile.js';
 import database from './knex.js';
 
 
 const dbOperations = {
   async createUser(loginInfo, userInfo) {
     try {
-      const value = await database.transaction(async (trx) => {
-        try {
-          const emailResponse = await trx
-            .insert(loginInfo)
-            .into("login")
-            .returning("email");
-            
-          const email = emailResponse[0];
-          console.log(email);
+      const trx = await database.transaction();
 
-          const userIdReponse = await trx("users")
-            .insert({ ...userInfo, email: email })
-            .returning("id");
+      const emailResponse = await trx.insert(loginInfo)
+      .into('login')
+      .returning('email');
 
-          console.log(userIdReponse);
-          
-         
-          await trx.commit();  
-          console.log("Transaction Success");
-          const isRegisteredSuccessfully = (Array.isArray(userIdReponse) && userIdReponse.length)? true:false;
-          console.log(`is registed success: ${isRegisteredSuccessfully}`);
-          return isRegisteredSuccessfully;
-        } catch (err) {
-          await trx.rollback();
-          console.log("Transaction Failed");
+      const email = emailResponse[0];
 
-          throw err;
-        }
-      });
-      console.log(`value is ${value}`)
-      return value;
-    }catch (err){
-        console.log("Database access error");
-        return false;
+      await trx("users")
+      .insert({...userInfo, email:email});
+
+      await trx.commit();
+      return;
+    }catch(err){
+      console.log('transaction failed');
+      throw err;
     }
 
   },
@@ -53,7 +36,7 @@ const dbOperations = {
 
     }catch(err){
       console.log("error getting user");
-      return null;
+      throw err;
     }
 
 
@@ -69,7 +52,7 @@ const dbOperations = {
     return dbResponse[0].hash;
     } catch (err){
       console.log("error accessing database")
-      return null;
+      throw err;
     };
   },
 
@@ -83,7 +66,7 @@ const dbOperations = {
       return dbLeagues.map(leagueObj => leagueObj.league);
     }catch(err){
       console.log("error getting leagues");
-      return null;
+      throw err;
     }
   },
 
@@ -97,7 +80,7 @@ const dbOperations = {
       return dbTeams.map(teamObj => teamObj.team);
     }catch(err){
       console.log("error getting teams");
-      return null;
+      throw err;
     }
 
   }
