@@ -4,7 +4,6 @@ import dbOperations from '../database/dbOperations.js';
 const userService = {
     async signInUser({email,password}){
         try{
-            console.log(`in service email: ${email}, password: ${password}`)
             const hash = await dbOperations.getHash(email);
             
             if(await bcrypt.compare(password, hash)){
