@@ -1,5 +1,5 @@
 import userRoutes from './userRoutes.js';
-import footBallDataRoutes from './footBallDataRoutes';
+import footBallDataRoutes from './footBallDataRoutes.js';
 import express from 'express';
 
 const router = express.Router();
