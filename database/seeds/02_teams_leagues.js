@@ -1,5 +1,5 @@
 
-exports.seed = async knex => {
+export async function seed(knex) {
   // Deletes ALL existing entries
 
   const dummyTeams = [
@@ -43,4 +43,4 @@ exports.seed = async knex => {
   await knex('followed_leagues').del();
 
   return await knex('followed_leagues').insert(leagueData);
-};
+}

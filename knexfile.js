@@ -6,10 +6,10 @@ const knexFile =  {
   development: {
     client: "pg",
     connection: {
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASS,
-      database: process.env.DB_NAME,
+      host: "localhost",//process.env.DB_HOST,
+      user: "postgres",//process.env.DB_USER,
+      password: "postgres",//process.env.DB_PASS,
+      database: "footy_db",//process.env.DB_NAME,
     },
     useNullAsDefault: true,
     migrations:{

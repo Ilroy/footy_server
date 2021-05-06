@@ -1,5 +1,5 @@
 
-exports.up = knex => {
+export function up(knex) {
     return knex.schema.createTable('users', table =>{
         table.increments();
         table.text('email').notNullable().unique();
@@ -8,9 +8,9 @@ exports.up = knex => {
 
         table.foreign('email').references('email').inTable('login');
     }) ; 
-};
+}
 
-exports.down = knex => {
+export function down(knex) {
     return knex.schema.dropTable('users');
   
-};
+}

@@ -1,5 +1,5 @@
 
-exports.seed = async knex=> {
+export async function seed(knex) {
   // Deletes ALL existing entries
 
   const dummyUsers = [
@@ -28,4 +28,4 @@ exports.seed = async knex=> {
       // Inserts seed entries
       return knex('users').insert(usersData);
     });
-};
+}

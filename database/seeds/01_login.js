@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 
-exports.seed =  async (knex) => { 
+export async function seed(knex){ 
   const dummyUsers = [
     {
       email: 'yorli@gmail.com',
