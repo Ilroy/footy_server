@@ -1,5 +1,4 @@
-const bcrypt = require('bcrypt');
-
+import bcrypt from 'bcrypt';
 export async function seed(knex){ 
   const dummyUsers = [
     {
